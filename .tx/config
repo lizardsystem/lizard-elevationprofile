@@ -1,0 +1,8 @@
+[main]
+host = https://translations.lizard.net
+type = PO
+
+[lizardsystem.lizard-elevationprofile]
+file_filter = lizard_elevationprofile/locale/<lang>/LC_MESSAGES/django.po
+source_file = lizard_elevationprofile/locale/en/LC_MESSAGES/django.po
+source_lang = en
