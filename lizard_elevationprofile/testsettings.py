@@ -41,6 +41,7 @@ SITE_ID = 1
 SECRET_KEY = 'This is not secret but that is ok.'
 INSTALLED_APPS = [
     'lizard_elevationprofile',
+    'lizard_map',
     'lizard_ui',
     'staticfiles',
     'compressor',

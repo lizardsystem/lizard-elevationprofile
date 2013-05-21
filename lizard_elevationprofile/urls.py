@@ -16,8 +16,11 @@ admin.autodiscover()
 urlpatterns = patterns(
     '',
     url(r'^ui/', include('lizard_ui.urls')),
+    url(r'^map/', include('lizard_map.urls')),
     # url(r'^map/', include('lizard_map.urls')),
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^$', views.ElevationProfile.as_view()),
+    url(r'^elevationdata/$', views.ElevationData.as_view()),
     # url(r'^something/',
     #     views.some_method,
     #     name="name_it"),
