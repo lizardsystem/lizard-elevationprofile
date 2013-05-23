@@ -80,13 +80,13 @@
             drawLineControl.deactivate();
             map.removeControl(drawLineControl);
             $(this).removeClass('active');
-            $(this).children('i').removeClass('icon-star').addClass('icon-star-empty');
+            $(this).children('i').removeClass('icon-2x');
         } else {
             map.addControl(drawLineControl);
             map.addControl(new OpenLayers.Control.MousePosition());
             drawLineControl.activate();
             $(this).addClass('active');
-            $(this).children('i').removeClass('icon-star-empty').addClass('icon-star');
+            $(this).children('i').addClass('icon-2x');
         }
     };
 

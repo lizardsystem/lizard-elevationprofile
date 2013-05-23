@@ -14,7 +14,8 @@ from django.http import HttpResponse
 from django.utils import simplejson as json
 
 # from lizard_elevationprofile import models
-
+# TODO: tmp debug import
+from graph_data import graph_data
 
 # class TodoView(UiView):
 #     """Simple view without a map."""
@@ -38,24 +39,22 @@ class ElevationProfile(MapView):
         """Add default-location-zoom."""
         actions = super(ElevationProfile, self).content_actions
         activate_elevationprofile = Action(
-            name=_('Elevation-Profile'),
+            name='',
             description=_('Draw a line to select an elevation profile'),
             url="javascript:void(null)",
-            icon='icon-star-empty',
+            icon='icon-bar-chart',
             klass='map-elevationprofile')
         actions.insert(0, activate_elevationprofile)
 
         return actions
 
+
 class ElevationData(View):
     """Get request bounds and linestring, respond json"""
     def get(self, request, *args, **kwargs):
-        data_raw = request.GET.items()
-        bounds = json.loads(request.GET.get('bounds'))
-        wkt_geom = request.GET.get('geom')
-        mapSrs = request.GET.get('srs')
+        #wkt_geom = request.GET.get('geom')
+        #mapSrs = request.GET.get('srs')
         # TODO: here the request to gislib, get elevation data for linestring
-        elevation_profile = [[[1, bounds['left']], [2, bounds['right']], [3, bounds['left']]]]
-        data_json = json.dumps(wkt_geom)
+        elevation_profile = graph_data
         data_json = json.dumps(elevation_profile)
         return HttpResponse(data_json, content_type='application/json')
