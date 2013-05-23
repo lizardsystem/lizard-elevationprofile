@@ -33,7 +33,8 @@
     // function to setup DrawLineControl and add to OpenLayers map
     var setupDrawLineControl = function () {
         var lineLayer = new OpenLayers.Layer.Vector("profile layer", {displayinlayerswitcher: false}),
-            drawLineControl = new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path);
+            drawLineControl = new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path, {handlerOptions: {maxVertices: 2}});
+        console.log(drawLineControl.handlerOptions);
         map.addLayer(lineLayer);
 
         lineLayer.events.on({
@@ -42,13 +43,9 @@
                     mapSrs = map.getProjection(),
                     url = 'elevationdata/'; // TODO: hardcoded shizzle
                 wktGeometry = geometry.toString();
-                console.log(wktGeometry);
-                console.log(geometry.bounds);
                 console.log(mapSrs);
-                requestData = "bounds=" + JSON.stringify(geometry.bounds) +
-                         "&geom=" + wktGeometry +
-                         "&srs=" + mapSrs;
-                // TODO: think about what data to send to backend like map SRS etc?
+                requestData = "&geom=" + wktGeometry +
+                              "&srs=" + mapSrs;
                 // TODO: maybe we can already send the map bounds on zoom / move to preload data from pyramid?
                 $.get(url, requestData, drawElevationGraph);
             }
