@@ -11,22 +11,9 @@ from lizard_ui.layout import Action
 # check this
 from django.views.generic.base import View
 from django.http import HttpResponse
-from django.utils import simplejson as json
+#from django.utils import simplejson as json
+import requests
 
-# from lizard_elevationprofile import models
-# TODO: tmp debug import
-from graph_data import graph_data
-
-# class TodoView(UiView):
-#     """Simple view without a map."""
-#     template_name = 'lizard_elevationprofile/todo.html'
-#     page_title = _('TODO view')
-
-
-# class Todo2View(MapView):
-#     """Simple view with a map."""
-#     template_name = 'lizard_elevationprofile/todo2.html'
-#     page_title = _('TODO 2 view')
 
 class ElevationProfile(MapView):
     """Elevation Profile tmp stub"""
@@ -52,9 +39,13 @@ class ElevationProfile(MapView):
 class ElevationData(View):
     """Get request bounds and linestring, respond json"""
     def get(self, request, *args, **kwargs):
-        #wkt_geom = request.GET.get('geom')
-        #mapSrs = request.GET.get('srs')
-        # TODO: here the request to gislib, get elevation data for linestring
-        elevation_profile = graph_data
-        data_json = json.dumps(elevation_profile)
-        return HttpResponse(data_json, content_type='application/json')
+        #parse srs of map, only get the number
+        mapsrs = request.GET.get('srs').split(':')[-1]
+        wkt_geom = request.GET.get('geom')
+        # TODO: here the request to gislib / gislib service
+        url = 'http://localhost:5000/rasterinfo/profile'
+        params = {'srs': mapsrs, 'geom': wkt_geom}
+        r = requests.get(url, params=params)
+        elevation_profile = r.text
+        #print(elevation_profile)
+        return HttpResponse(elevation_profile, content_type='application/json')

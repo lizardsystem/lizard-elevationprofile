@@ -9,7 +9,6 @@
     // function to draw elevation graph with flot jquery plugin
     var drawElevationGraph = function (elevationData) {
         console.log('drawing graph');
-        console.log(map.getZoom());
         console.log(elevationData);
         // TODO: hmm, maybe just kill the first popup since we only have one?
         for (var existingPopup in map.popups) {
@@ -27,7 +26,8 @@
             );
         map.addPopup(popup);
         options = '';
-        $.plot($("#elevation-profile"), elevationData, options);
+        // TODO: hardcoded 'profile': ugly
+        $.plot($("#elevation-profile"), elevationData['profile'], options);
     };
 
     // function to setup DrawLineControl and add to OpenLayers map
