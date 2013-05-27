@@ -7,8 +7,6 @@
 (function () {
     // function to draw elevation graph with flot jquery plugin
     var drawElevationGraph = function (elevationData) {
-        console.log('drawing graph');
-        //console.log(elevationData);
         // TODO: hmm, maybe just kill the first popup since we only have one?
         for (var existingPopup in map.popups) {
             map.removePopup(map.popups[existingPopup]);
@@ -16,18 +14,19 @@
         var options,
             graphHTML = '<div id="elevation-profile" style="width:400px;height:200px">Graph</div>',
             popup = new OpenLayers.Popup.FramedCloud(
-                "Graph Popup",
+                "Elevation Profile",
                 map.getLonLatFromPixel((map.getControlsByClass("OpenLayers.Control.MousePosition")[0]).lastXy),
                 null,
                 graphHTML,
                 null,
                 true
             );
-        console.log(popup.events)
         map.addPopup(popup);
-        options = '';
+        //var plotOptions = {x-axis: {position: "top"}};
+        //var plotOptions = {x-axis: "" };
+        var plotOptions = '';
         // TODO: hardcoded 'profile': ugly
-        $.plot($("#elevation-profile"), elevationData['profile'], options);
+        $.plot($("#elevation-profile"), elevationData['profile'], plotOptions);
     };
 
     // function to setup DrawLineControl and add to OpenLayers map
@@ -53,11 +52,8 @@
     };
 
     // draw line for elevation profile and get data from server
-    // TODO: ff deze shizzle checken want hier gebeurt veel
     // TODO: destroy features on finish
     var actionElevationProfile = function () {
-        console.log('elevation profile clicked');
-
         var drawLineControl = map.getControlsByClass('OpenLayers.Control.DrawFeature')[0];
 
         if (drawLineControl === undefined) {
