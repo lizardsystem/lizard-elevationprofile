@@ -78,6 +78,9 @@ STATIC_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'static')
 MEDIA_ROOT = os.path.join(BUILDOUT_DIR, 'var', 'media')
 STATICFILES_FINDERS = STATICFILES_FINDERS
 
+# url of rasterinfo server
+RASTERINFO_SERVER_URL = 'http://localhost:5000/rasterinfo/profile'
+
 
 try:
     # Import local settings that aren't stored in svn/git.

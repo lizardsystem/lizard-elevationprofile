@@ -4,11 +4,14 @@ from __future__ import unicode_literals
 from __future__ import print_function
 
 from django.utils.translation import ugettext as _
-from lizard_map.views import MapView
-from lizard_ui.layout import Action
 from django.views.generic.base import View
 from django.http import HttpResponse
+from django.conf import settings
 #from django.utils import simplejson as json
+
+from lizard_map.views import MapView
+from lizard_ui.layout import Action
+
 import requests
 
 
@@ -35,12 +38,12 @@ class ElevationProfile(MapView):
 class ElevationData(View):
     """Get request bounds and linestring, respond json"""
     def get(self, request, *args, **kwargs):
-        #parse srs of map, only get the number
+        # parse epsg string of map, only get the number
         epsg_code = request.GET.get('srs').split(':')[-1]
         wkt_geom = request.GET.get('geom')
-        # TODO: here the request to gislib / gislib service
-        url = 'http://localhost:5000/rasterinfo/profile'
+        url = settings.RASTERINFO_SERVER_URL
         params = {'epsg': epsg_code, 'geom': wkt_geom}
         r = requests.get(url, params=params)
         elevation_profile = r.text
+
         return HttpResponse(elevation_profile, content_type='application/json')
