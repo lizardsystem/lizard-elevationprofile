@@ -16,13 +16,17 @@ import requests
 
 
 class ElevationProfile(MapView):
-    """Elevation Profile tmp stub"""
+    """
+    Elevation Profile tmp stub
+    """
     template_name = 'lizard_elevationprofile/elevationprofile.html'
     page_title = _('Elevation Profile')
 
     @property
     def content_actions(self):
-        """Add default-location-zoom."""
+        """
+        Add button for elevation profile
+        """
         actions = super(ElevationProfile, self).content_actions
         activate_elevationprofile = Action(
             name='',
@@ -36,9 +40,11 @@ class ElevationProfile(MapView):
 
 
 class ElevationData(View):
-    """Get request bounds and linestring, respond json"""
     def get(self, request, *args, **kwargs):
-        # parse epsg string of map, only get the number
+        """
+        Get request linestring and epsg, respond json elevation profile
+        """
+        # parse epsg string of map, only get the digits
         epsg_code = request.GET.get('srs').split(':')[-1]
         wkt_geom = request.GET.get('geom')
         url = settings.RASTERINFO_SERVER_URL
