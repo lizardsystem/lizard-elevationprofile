@@ -22,17 +22,22 @@
                 true
             );
         map.addPopup(popup);
-        //var plotOptions = {x-axis: {position: "top"}};
-        //var plotOptions = {x-axis: "" };
-        var plotOptions = '';
         // TODO: hardcoded 'profile': ugly
-        $.plot($("#elevation-profile"), [elevationData['profile']], plotOptions);
+        var elevationSeries = [{data: elevationData['profile']}];
+        var plotOptions = {
+                            label: "Height", 
+                            lines: {fill: true},
+                            grid: {clickable: true, hoverable: true},
+                          };
+        $.plot($("#elevation-profile"), elevationSeries, plotOptions);
     };
 
     // function to setup DrawLineControl and add to OpenLayers map
     var setupDrawLineControl = function () {
-        var lineLayer = new OpenLayers.Layer.Vector("Profile layer", {displayInLayerSwitcher: false}),
+        var lineLayer = new OpenLayers.Layer.Vector("Profile layer", {
+                                                    displayInLayerSwitcher: false}),
             drawLineControl = new OpenLayers.Control.DrawFeature(lineLayer, OpenLayers.Handler.Path, {handlerOptions: {maxVertices: 2}});
+
         map.addLayer(lineLayer);
 
         lineLayer.events.on({
@@ -44,7 +49,8 @@
                 requestData = "&geom=" + wktGeometry +
                               "&srs=" + mapSrs;
                 $.get(url, requestData, drawElevationGraph);
-            }
+            },
+            sketchstarted: function (event) {console.log(event);},
         });
 
         return drawLineControl;
