@@ -26,7 +26,7 @@
         //var plotOptions = {x-axis: "" };
         var plotOptions = '';
         // TODO: hardcoded 'profile': ugly
-        $.plot($("#elevation-profile"), elevationData['profile'], plotOptions);
+        $.plot($("#elevation-profile"), [elevationData['profile']], plotOptions);
     };
 
     // function to setup DrawLineControl and add to OpenLayers map
