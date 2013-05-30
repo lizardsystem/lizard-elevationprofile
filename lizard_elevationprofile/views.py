@@ -42,13 +42,12 @@ class ElevationProfile(MapView):
 class ElevationData(View):
     def get(self, request, *args, **kwargs):
         """
-        Get request linestring and epsg, respond json elevation profile
+        Get request linestring and srs, respond json elevation profile
         """
-        # parse epsg string of map, only get the digits
-        epsg_code = request.GET.get('srs').split(':')[-1]
+        srs = request.GET.get('srs')
         wkt_geom = request.GET.get('geom')
         url = settings.RASTERINFO_SERVER_URL
-        params = {'epsg': epsg_code, 'geom': wkt_geom}
+        params = {'srs': srs, 'geom': wkt_geom}
         r = requests.get(url, params=params)
         elevation_profile = r.text
 
