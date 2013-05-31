@@ -3,6 +3,21 @@
 /*global $, OpenLayers, map*/
 
 (function () {
+
+    function showToolTip(x, y, contents) {
+        $("<div id='tooltip'>" + contents + "</div>").css({
+            position: "absolute",
+            display: "none",
+            top: y + 5,
+            left: x + 5,
+            "z-index": "9999",
+            border: "none",
+            padding: "2px",
+            "background-color": "#eee",
+            opacity: 0.80
+        }).appendTo("body").fadeIn(200);
+    }
+
     /** Draw elevation graph in popup with Flot jQuery plugin
      */
     var drawElevationGraph = function (elevationData) {
@@ -12,7 +27,10 @@
         // TODO: hardcoded 'profile': ugly
         var elevationSeries = [{data: elevationData.profile}];
         var plotOptions = {label: "Height",
-                           lines: {fill: true},
+                           lines: {
+                                    fill: true,
+                                    fillColor: {colors: [{opacity: 0.8}, {opacity: 0.1}]}
+                                  },
                            grid: {clickable: true, hoverable: true}
                           };
 
@@ -33,6 +51,23 @@
 
         map.addPopup(popup);
         $.plot($("#elevation-profile"), elevationSeries, plotOptions);
+
+        // Bind hover event
+        var previousPoint = null;
+        $("#elevation-profile").bind("plothover", function(event, pos, item){
+            if (item) {
+                if (previousPoint != item.dataIndex) {
+                    previousPoint = item.dataIndex;
+                    $("#tooltip").remove();
+                    var x = item.datapoint[0].toFixed(2);
+                    var y = item.datapoint[1].toFixed(2);
+                    showToolTip(item.pageX, item.pageY, y + "m.");
+                }
+            } else {
+                $("#tooltip").remove();
+                previousPoint = null;
+            }
+        });
     };
 
     /** Setup DrawLineControl and add to global OpenLayers map object
