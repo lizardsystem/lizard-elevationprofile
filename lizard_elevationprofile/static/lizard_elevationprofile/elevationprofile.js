@@ -8,13 +8,13 @@
         $("<div id='tooltip'>" + contents + "</div>").css({
             position: "absolute",
             display: "none",
-            top: y + 5,
+            top: y - 25,
             left: x + 5,
             "z-index": "9999",
             border: "none",
             padding: "2px",
             "background-color": "#eee",
-            opacity: 0.80
+            opacity: 0.70
         }).appendTo("body").fadeIn(200);
     }
 
@@ -26,13 +26,19 @@
 
         // TODO: hardcoded 'profile': ugly
         var elevationSeries = [{data: elevationData.profile}];
-        var plotOptions = {label: "Height",
-                           lines: {
-                                    fill: true,
-                                    fillColor: {colors: [{opacity: 0.8}, {opacity: 0.1}]}
-                                  },
-                           grid: {clickable: true, hoverable: true}
-                          };
+        var plotOptions = {
+            label: "Height",
+            lines: {
+                fill: true,
+                fillColor: {
+                    colors: [
+                        {opacity: 0.8},
+                        {opacity: 0.1}
+                    ]
+                }
+            },
+            grid: {clickable: true, hoverable: true}
+        };
 
         // TODO: hmm, maybe just kill the first popup since we only have one?
         for (var existingPopup in map.popups) {
@@ -61,7 +67,7 @@
                     $("#tooltip").remove();
                     var x = item.datapoint[0].toFixed(2);
                     var y = item.datapoint[1].toFixed(2);
-                    showToolTip(item.pageX, item.pageY, y + "m.");
+                    showToolTip(item.pageX, item.pageY, y + " m.");
                 }
             } else {
                 $("#tooltip").remove();
@@ -73,12 +79,30 @@
     /** Setup DrawLineControl and add to global OpenLayers map object
      */
     var setupDrawLineControl = function () {
-        var lineLayer = new OpenLayers.Layer.Vector("Profile layer",
-                {displayInLayerSwitcher: false});
-        var drawLineControl = new OpenLayers.Control.DrawFeature(lineLayer,
-                    OpenLayers.Handler.Path, 
-                    {handlerOptions: {maxVertices: 2}}
-                );
+        var defaultStyle = new OpenLayers.Style({
+            'strokeWidth': 3,
+            'strokeColor': "#ff0000"
+        });
+        var tempStyle = new OpenLayers.Style({
+            'strokeDashstyle': 'dash',
+            'strokeColor': "#ff0000"
+        });
+        var styleMap = new OpenLayers.StyleMap({
+            'default': defaultStyle, 
+            'temporary': tempStyle
+        });
+        var lineLayer = new OpenLayers.Layer.Vector(
+            "Profile layer",
+            {
+                displayInLayerSwitcher: false,
+                styleMap: styleMap
+            }
+        );
+        var drawLineControl = new OpenLayers.Control.DrawFeature(
+            lineLayer,
+            OpenLayers.Handler.Path, 
+            {handlerOptions: {maxVertices: 2}}
+        );
 
         map.addLayer(lineLayer);
 
