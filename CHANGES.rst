@@ -2,6 +2,12 @@ Changelog of lizard-elevationprofile
 ===================================================
 
 
+0.3 (unreleased)
+----------------
+
+- Nothing changed yet.
+
+
 0.2.1 (2013-06-03)
 ------------------
 
