@@ -112,7 +112,9 @@
                 styleMap: styleMap
             }
         );
-       
+        
+        /* Custom path handler to draw *live* profiles
+         */
         var modifiedSwitch = false;
         var customHandler = new OpenLayers.Class(OpenLayers.Handler.Path, {
             addPoint: function (pixel) {
@@ -120,11 +122,11 @@
 
                 if (modifiedSwitch) {
                     lineLayer.events.un({sketchmodified: getElevationData});
-                    modifiedSwitch = false;
+                    modifiedSwitch = !modifiedSwitch;
                     console.log("point added", modifiedSwitch);
                 } else {
                     lineLayer.events.on({sketchmodified: getElevationData});
-                    modifiedSwitch = true;
+                    modifiedSwitch = !modifiedSwitch;
                     console.log("point added", modifiedSwitch);
                 }
             }
@@ -144,7 +146,9 @@
         // register featureadded event on lineLayer
         lineLayer.events.on({
             featureadded: getElevationData,
-            sketchcomplete: function () {lineLayer.events.un({sketchmodified: getElevationData})}
+            sketchcomplete: function () {
+                lineLayer.events.un({sketchmodified: getElevationData})
+            }
         });
 
         return drawLineControl;
