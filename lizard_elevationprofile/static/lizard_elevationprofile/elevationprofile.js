@@ -132,8 +132,8 @@
 
         var drawLineControl = new OpenLayers.Control.DrawFeature(
             lineLayer,
-            OpenLayers.Handler.Path, 
-            //customHandler, 
+            //OpenLayers.Handler.Path, 
+            customHandler, 
             {
                 handlerOptions: {maxVertices: 2},
             }
