@@ -14,7 +14,7 @@ install_requires = [
     'django-nose',
     'lizard-ui >= 4.0b5',
     'lizard-map',
-    'pyproj',
+    #'pyproj',
     'requests',
     ],
 
