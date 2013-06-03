@@ -2,7 +2,8 @@ Changelog of lizard-elevationprofile
 ===================================================
 
 
-0.1 (unreleased)
+0.1 (2013-06-03)
 ----------------
 
-- Initial project structure created with nensskel 1.34.dev0.
+- Initial release
+- Draw line in map and send linestring to rasterinfo server
