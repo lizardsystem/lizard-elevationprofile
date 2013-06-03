@@ -26,15 +26,15 @@ tests_require = [
 
 setup(name='lizard-elevationprofile',
       version=version,
-      description="TODO",
+      description="Draw a line in the map to get an elevation profile",
       long_description=long_description,
       # Get strings from http://www.python.org/pypi?%3Aaction=list_classifiers
       classifiers=['Programming Language :: Python',
                    'Framework :: Django',
                    ],
       keywords=[],
-      author='TODO',
-      author_email='TODO@nelen-schuurmans.nl',
+      author='Arjen Vrielink',
+      author_email='arjen.vrielink@nelen-schuurmans.nl',
       url='',
       license='GPL',
       packages=['lizard_elevationprofile'],

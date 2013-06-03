@@ -4,6 +4,8 @@
 
 (function () {
 
+    /** Show tooltip with contents for mouse x, y (hover or click)
+     */
     function showToolTip(x, y, contents) {
         $("<div id='tooltip'>" + contents + "</div>").css({
             position: "absolute",
@@ -46,21 +48,21 @@
         }
 
         var popup = new OpenLayers.Popup.FramedCloud(
-                "Elevation Profile",
-                map.getLonLatFromPixel((map.getControlsByClass(
-                        "OpenLayers.Control.MousePosition")[0]).lastXy),
-                null,
-                graphHTML,
-                null,
-                true
-            );
+            "Elevation Profile",
+            map.getLonLatFromPixel((map.getControlsByClass(
+                    "OpenLayers.Control.MousePosition")[0]).lastXy),
+            null,
+            graphHTML,
+            null,
+            true
+        );
 
         map.addPopup(popup);
         $.plot($("#elevation-profile"), elevationSeries, plotOptions);
 
         // Bind hover event
         var previousPoint = null;
-        $("#elevation-profile").bind("plothover", function(event, pos, item){
+        $("#elevation-profile").bind("plothover", function(event, pos, item) {
             if (item) {
                 if (previousPoint != item.dataIndex) {
                     previousPoint = item.dataIndex;
@@ -74,6 +76,18 @@
                 previousPoint = null;
             }
         });
+    };
+
+    /** Callback handler to get elevation data for drawn line
+     */
+    var getElevationData = function (event) {
+        var geometry = event.feature.geometry; // profile line
+        var mapSrs = map.getProjection(); // map projection
+        var url = 'elevationdata/'; // TODO: hardcoded shizzle
+        wktGeometry = geometry.toString();
+        requestData = "&geom=" + wktGeometry +
+                      "&srs=" + mapSrs;
+        $.get(url, requestData, drawElevationGraph);
     };
 
     /** Setup DrawLineControl and add to global OpenLayers map object
@@ -98,26 +112,39 @@
                 styleMap: styleMap
             }
         );
+       
+        var modifiedSwitch = false;
+        var customHandler = new OpenLayers.Class(OpenLayers.Handler.Path, {
+            addPoint: function (pixel) {
+                OpenLayers.Handler.Path.prototype.addPoint.apply(this, arguments);
+
+                if (modifiedSwitch) {
+                    lineLayer.events.un({sketchmodified: getElevationData});
+                    modifiedSwitch = false;
+                    console.log("point added", modifiedSwitch);
+                } else {
+                    lineLayer.events.on({sketchmodified: getElevationData});
+                    modifiedSwitch = true;
+                    console.log("point added", modifiedSwitch);
+                }
+            }
+        });
+
         var drawLineControl = new OpenLayers.Control.DrawFeature(
             lineLayer,
-            OpenLayers.Handler.Path, 
-            {handlerOptions: {maxVertices: 2}}
+            //OpenLayers.Handler.Path, 
+            customHandler, 
+            {
+                handlerOptions: {maxVertices: 2},
+            }
         );
 
         map.addLayer(lineLayer);
 
         // register featureadded event on lineLayer
         lineLayer.events.on({
-            featureadded: function (event) {
-                var geometry = event.feature.geometry; // profile line
-                var mapSrs = map.getProjection(); // map projection
-                var url = 'elevationdata/'; // TODO: hardcoded shizzle
-                wktGeometry = geometry.toString();
-                requestData = "&geom=" + wktGeometry +
-                              "&srs=" + mapSrs;
-                $.get(url, requestData, drawElevationGraph);
-            },
-            sketchstarted: function (event) {console.log(event);},
+            featureadded: getElevationData,
+            sketchcomplete: function () {lineLayer.events.un({sketchmodified: getElevationData})}
         });
 
         return drawLineControl;
