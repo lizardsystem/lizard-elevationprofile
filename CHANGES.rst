@@ -2,7 +2,7 @@ Changelog of lizard-elevationprofile
 ===================================================
 
 
-0.2 (unreleased)
+0.2 (2013-06-03)
 ----------------
 
 - Make test pass by cheating
