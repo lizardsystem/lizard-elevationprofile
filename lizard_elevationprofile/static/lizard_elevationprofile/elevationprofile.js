@@ -95,7 +95,7 @@
                       "&srs=" + mapSrs;
 
         if (q !== null) {
-            //q.abort();
+            //q.abort(); // TODO: this doesn't function properly yet
             q = null;
         }
         q = $.get(url, requestData, drawElevationGraph);
