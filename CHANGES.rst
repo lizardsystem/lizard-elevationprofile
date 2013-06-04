@@ -2,8 +2,8 @@ Changelog of lizard-elevationprofile
 ===================================================
 
 
-0.2.2 (unreleased)
-----------------
+0.2.2 (2013-06-04)
+------------------
 
 - Fixed close live update profile bug
 
