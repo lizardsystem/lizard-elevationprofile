@@ -4,6 +4,8 @@
 
 (function () {
 
+    var q = null, popup = null;
+
     /** Show tooltip with contents for mouse x, y (hover or click)
      */
     function showToolTip(x, y, contents) {
@@ -23,6 +25,7 @@
     /** Draw elevation graph in popup with Flot jQuery plugin
      */
     var drawElevationGraph = function (elevationData) {
+        q = null; // reset pointer to ajax request
         var graphHTML = '<div id="elevation-profile" \
                          style="width:400px;height:200px">Graph</div>';
 
@@ -42,15 +45,18 @@
             grid: {clickable: true, hoverable: true}
         };
 
-        // TODO: hmm, maybe just kill the first popup since we only have one?
-        for (var existingPopup in map.popups) {
-            map.removePopup(map.popups[existingPopup]);
+        if (popup !== null) {
+            popup.destroy();
         }
 
-        var popup = new OpenLayers.Popup.FramedCloud(
+        var mouseoffset = (map.getControlsByClass("OpenLayers.Control.MousePosition")[0]).lastXy;
+        mouseoffset.x += 1;
+        mouseoffset.y += 1;
+        var popuploc = map.getLonLatFromPixel(mouseoffset);
+
+        popup = new OpenLayers.Popup.FramedCloud(
             "Elevation Profile",
-            map.getLonLatFromPixel((map.getControlsByClass(
-                    "OpenLayers.Control.MousePosition")[0]).lastXy),
+            popuploc,
             null,
             graphHTML,
             null,
@@ -62,9 +68,9 @@
 
         // Bind hover event
         var previousPoint = null;
-        $("#elevation-profile").bind("plothover", function(event, pos, item) {
+        $("#elevation-profile").bind("plothover", function (event, pos, item) {
             if (item) {
-                if (previousPoint != item.dataIndex) {
+                if (previousPoint !== item.dataIndex) {
                     previousPoint = item.dataIndex;
                     $("#tooltip").remove();
                     var x = item.datapoint[0].toFixed(2);
@@ -84,10 +90,15 @@
         var geometry = event.feature.geometry; // profile line
         var mapSrs = map.getProjection(); // map projection
         var url = 'elevationdata/'; // TODO: hardcoded shizzle
-        wktGeometry = geometry.toString();
-        requestData = "&geom=" + wktGeometry +
+        var wktGeometry = geometry.toString();
+        var requestData = "&geom=" + wktGeometry +
                       "&srs=" + mapSrs;
-        $.get(url, requestData, drawElevationGraph);
+
+        if (q !== null) {
+            //q.abort();
+            q = null;
+        }
+        q = $.get(url, requestData, drawElevationGraph);
     };
 
     /** Setup DrawLineControl and add to global OpenLayers map object
@@ -102,7 +113,7 @@
             'strokeColor': "#ff0000"
         });
         var styleMap = new OpenLayers.StyleMap({
-            'default': defaultStyle, 
+            'default': defaultStyle,
             'temporary': tempStyle
         });
         var lineLayer = new OpenLayers.Layer.Vector(
@@ -112,7 +123,7 @@
                 styleMap: styleMap
             }
         );
-        
+
         /* Custom path handler to draw *live* profiles
          */
         var modifiedSwitch = false;
@@ -123,11 +134,9 @@
                 if (modifiedSwitch) {
                     lineLayer.events.un({sketchmodified: getElevationData});
                     modifiedSwitch = !modifiedSwitch;
-                    console.log("point added", modifiedSwitch);
                 } else {
                     lineLayer.events.on({sketchmodified: getElevationData});
                     modifiedSwitch = !modifiedSwitch;
-                    console.log("point added", modifiedSwitch);
                 }
             }
         });
@@ -135,7 +144,7 @@
         var drawLineControl = new OpenLayers.Control.DrawFeature(
             lineLayer,
             //OpenLayers.Handler.Path, 
-            customHandler, 
+            customHandler,
             {
                 handlerOptions: {maxVertices: 2},
             }
@@ -147,7 +156,7 @@
         lineLayer.events.on({
             featureadded: getElevationData,
             sketchcomplete: function () {
-                lineLayer.events.un({sketchmodified: getElevationData})
+                lineLayer.events.un({sketchmodified: getElevationData});
             }
         });
 
@@ -161,7 +170,7 @@
         if (drawLineControl === undefined) {
             drawLineControl = setupDrawLineControl();
         }
-         
+
         if (drawLineControl.active) {
             drawLineControl.layer.destroyFeatures();
             drawLineControl.deactivate();
