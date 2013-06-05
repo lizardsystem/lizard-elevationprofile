@@ -6,6 +6,20 @@
 
     var q = null, popup = null;
 
+    /** Setup elevation profile graph div
+     */
+    $('<div id="elevation-profile"></div>').css({
+        position: "absolute",
+        display: "none",
+        width: "512px",
+        height: "300px",
+        top: "80px",
+        left: "80px",
+        "z-index": "9999",
+        border: "none",
+        opacity: 0.90,
+    }).appendTo("body");
+
     /** Show tooltip with contents for mouse x, y (hover or click)
      */
     function showToolTip(x, y, contents) {
@@ -26,8 +40,6 @@
      */
     var drawElevationGraph = function (elevationData) {
         q = null; // reset pointer to ajax request
-        var graphHTML = '<div id="elevation-profile" \
-                         style="width:400px;height:200px">Graph</div>';
 
         // TODO: hardcoded 'profile': ugly
         var elevationSeries = [{data: elevationData.profile}];
@@ -45,25 +57,6 @@
             grid: {clickable: true, hoverable: true}
         };
 
-        if (popup !== null) {
-            popup.destroy();
-        }
-
-        var mouseoffset = (map.getControlsByClass("OpenLayers.Control.MousePosition")[0]).lastXy;
-        mouseoffset.x += 1;
-        mouseoffset.y += 1;
-        var popuploc = map.getLonLatFromPixel(mouseoffset);
-
-        popup = new OpenLayers.Popup.FramedCloud(
-            "Elevation Profile",
-            popuploc,
-            null,
-            graphHTML,
-            null,
-            true
-        );
-
-        map.addPopup(popup);
         $.plot($("#elevation-profile"), elevationSeries, plotOptions);
 
         // Bind hover event
@@ -131,6 +124,8 @@
             addPoint: function (pixel) {
                 OpenLayers.Handler.Path.prototype.addPoint.apply(this, arguments);
 
+                // NOTE: switch only works when adding only 2 vertices; if
+                // you want to add more vertices
                 if (modifiedSwitch) {
                     lineLayer.events.un({sketchmodified: getElevationData});
                     modifiedSwitch = !modifiedSwitch;
@@ -170,6 +165,8 @@
         if (drawLineControl === undefined) {
             drawLineControl = setupDrawLineControl();
         }
+
+        $("#elevation-profile").toggle();
 
         if (drawLineControl.active) {
             drawLineControl.layer.destroyFeatures();
