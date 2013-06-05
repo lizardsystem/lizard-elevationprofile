@@ -4,7 +4,7 @@
 
 (function () {
 
-    var q = null, popup = null;
+    var q = null, popup = null, modifiedSwitch = false;
 
     /** Setup elevation profile graph div
      */
@@ -119,17 +119,11 @@
 
         /* Custom path handler to draw *live* profiles
          */
-        var modifiedSwitch = false;
         var customHandler = new OpenLayers.Class(OpenLayers.Handler.Path, {
             addPoint: function (pixel) {
                 OpenLayers.Handler.Path.prototype.addPoint.apply(this, arguments);
 
-                // NOTE: switch only works when adding only 2 vertices; if
-                // you want to add more vertices
-                if (modifiedSwitch) {
-                    lineLayer.events.un({sketchmodified: getElevationData});
-                    modifiedSwitch = !modifiedSwitch;
-                } else {
+                if (!modifiedSwitch) {
                     lineLayer.events.on({sketchmodified: getElevationData});
                     modifiedSwitch = !modifiedSwitch;
                 }
@@ -152,6 +146,7 @@
             featureadded: getElevationData,
             sketchcomplete: function () {
                 lineLayer.events.un({sketchmodified: getElevationData});
+                modifiedSwitch = !modifiedSwitch;
             }
         });
 
