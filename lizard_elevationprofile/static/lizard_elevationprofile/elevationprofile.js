@@ -8,20 +8,16 @@
 
     /** Setup elevation profile graph div
      */
-    $('<div id="elevation-profile"></div>').css({
-        position: "absolute",
-        display: "none",
-        width: "512px",
-        height: "300px",
-        top: "80px",
-        left: "80px",
-        "z-index": "9999",
-        border: "none",
-        opacity: 0.90,
-    }).appendTo("body");
+    var $el = $('<div class="flot-graph-canvas"></div>')
+		.css({
+			position: 'absolute',
+			top:0, bottom:0, left:0, right:0
+        })
+		.appendTo("#elevation-profile-content");
 
     /** Show tooltip with contents for mouse x, y (hover or click)
      */
+
     function showToolTip(x, y, contents) {
         $("<div id='tooltip'>" + contents + "</div>").css({
             position: "absolute",
@@ -57,11 +53,16 @@
             grid: {clickable: true, hoverable: true}
         };
 
-        $.plot($("#elevation-profile"), elevationSeries, plotOptions);
+		console.log('profile');
+		$el.empty();
+        $.plot($el, elevationSeries, plotOptions);
+
+
 
         // Bind hover event
         var previousPoint = null;
-        $("#elevation-profile").bind("plothover", function (event, pos, item) {
+		// FIX element for plothover
+        $el.bind("plothover", function (event, pos, item) {
             if (item) {
                 if (previousPoint !== item.dataIndex) {
                     previousPoint = item.dataIndex;
@@ -82,7 +83,7 @@
     var getElevationData = function (event) {
         var geometry = event.feature.geometry; // profile line
         var mapSrs = map.getProjection(); // map projection
-        var url = 'elevationdata/'; // TODO: hardcoded shizzle
+        var url = '/elevationdata/'; // TODO: hardcoded shizzle
         var wktGeometry = geometry.toString();
         var requestData = "&geom=" + wktGeometry +
                       "&srs=" + mapSrs;
@@ -132,7 +133,7 @@
 
         var drawLineControl = new OpenLayers.Control.DrawFeature(
             lineLayer,
-            //OpenLayers.Handler.Path, 
+            //OpenLayers.Handler.Path,
             customHandler,
             {
                 handlerOptions: {maxVertices: 2},
@@ -155,32 +156,40 @@
 
     // draw line for elevation profile and get data from server
     var actionElevationProfile = function () {
+		console.log('action');
         var drawLineControl = map.getControlsByClass('OpenLayers.Control.DrawFeature')[0];
 
         if (drawLineControl === undefined) {
             drawLineControl = setupDrawLineControl();
         }
 
-        $("#elevation-profile").toggle();
-
         if (drawLineControl.active) {
             drawLineControl.layer.destroyFeatures();
             drawLineControl.deactivate();
             map.removeControl(drawLineControl);
             map.removeLayer(drawLineControl.layer);
-            $(this).removeClass('active');
-            $(this).children('i').removeClass('icon-2x');
         } else {
             map.addControl(drawLineControl);
             map.addControl(new OpenLayers.Control.MousePosition());
             drawLineControl.activate();
-            $(this).addClass('active');
-            $(this).children('i').addClass('icon-2x');
         }
     };
+	var activateElevationProfile = function (event) {
+		if (event.relatedTarget.id === "elevation-profile-action"){
+			// call to disable the elevation profile
+			actionElevationProfile();
+		}
+
+		if (event.target.id === "elevation-profile-action"){
+			// call to enable
+			actionElevationProfile()
+		}
+	}
+
 
     function setUpElevationProfile() {
-        $('.map-elevationprofile').on("click", actionElevationProfile);
+		$('#box-awesome a[data-toggle="tab"]').on("show", activateElevationProfile);
+
     }
 
     $(document).ready(function () {
