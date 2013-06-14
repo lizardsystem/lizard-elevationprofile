@@ -141,6 +141,7 @@
         );
 
         map.addLayer(lineLayer);
+        lineLayer.setZIndex(1100);
 
         // register featureadded event on lineLayer
         lineLayer.events.on({
