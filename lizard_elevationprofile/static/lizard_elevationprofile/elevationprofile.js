@@ -183,7 +183,7 @@
                 for (var i=0; i<map.layers.length; i++) {
                     var layer2 = map.layers[i];
                     if (layer === layer2) {
-                        layer2.setZIndex(layer2zindex[j][1]);
+                        layer2.setZIndex(parseInt(layer2zindex[j][1]));
                         break;
                     }
                 }
