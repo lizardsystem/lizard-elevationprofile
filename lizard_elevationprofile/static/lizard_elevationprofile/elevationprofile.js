@@ -167,7 +167,26 @@
             drawLineControl.layer.destroyFeatures();
             drawLineControl.deactivate();
             map.removeControl(drawLineControl);
+
+            // save Z indices
+            var layer2zindex = {};
+            for (var i=0; i<map.layers.length; i++) {
+                var layer = map.layers[i];
+                layer2zindex[layer] = layer.getZIndex();
+            }
+
             map.removeLayer(drawLineControl.layer);
+
+            // restore Z indices
+            for (var layer in layer2zindex) {
+                for (var i=0; i<map.layers.length; i++) {
+                    var layer2 = map.layers[i];
+                    if (layer === layer2) {
+                        layer2.setZIndex(layer2zindex[layer]);
+                        break;
+                    }
+                }
+            }
         } else {
             map.addControl(drawLineControl);
             map.addControl(new OpenLayers.Control.MousePosition());
