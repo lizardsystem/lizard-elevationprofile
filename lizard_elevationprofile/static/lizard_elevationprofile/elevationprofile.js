@@ -155,8 +155,7 @@
     };
 
     // draw line for elevation profile and get data from server
-    var actionElevationProfile = function () {
-		console.log('action');
+    var toggleElevationProfile = function () {
         var drawLineControl = map.getControlsByClass('OpenLayers.Control.DrawFeature')[0];
 
         if (drawLineControl === undefined) {
@@ -175,14 +174,14 @@
         }
     };
 	var activateElevationProfile = function (event) {
-		if (event.relatedTarget.id === "elevation-profile-action"){
-			// call to disable the elevation profile
-			actionElevationProfile();
+		if (event.relatedTarget && event.relatedTarget.id === "elevation-profile-action"){
+			// switched to other tab
+			toggleElevationProfile();
 		}
 
 		if (event.target.id === "elevation-profile-action"){
-			// call to enable
-			actionElevationProfile()
+			// switched to elevation profile tab
+			toggleElevationProfile();
 		}
 	}
 
