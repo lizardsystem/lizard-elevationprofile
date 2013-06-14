@@ -169,20 +169,21 @@
             map.removeControl(drawLineControl);
 
             // save Z indices
-            var layer2zindex = {};
+            var layer2zindex = [];
             for (var i=0; i<map.layers.length; i++) {
                 var layer = map.layers[i];
-                layer2zindex[layer] = layer.getZIndex();
+                layer2zindex.push([layer, layer.getZIndex()]);
             }
 
             map.removeLayer(drawLineControl.layer);
 
             // restore Z indices
-            for (var layer in layer2zindex) {
+            for (var j=0; j<layer2zindex; j++) {
+                var layer = layer2zindex[j][0];
                 for (var i=0; i<map.layers.length; i++) {
                     var layer2 = map.layers[i];
                     if (layer === layer2) {
-                        layer2.setZIndex(layer2zindex[layer]);
+                        layer2.setZIndex(layer2zindex[j][1]);
                         break;
                     }
                 }
