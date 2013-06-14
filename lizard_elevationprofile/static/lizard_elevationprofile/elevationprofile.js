@@ -178,7 +178,7 @@
             map.removeLayer(drawLineControl.layer);
 
             // restore Z indices
-            for (var j=0; j<layer2zindex; j++) {
+            for (var j=0; j<layer2zindex.length; j++) {
                 var layer = layer2zindex[j][0];
                 for (var i=0; i<map.layers.length; i++) {
                     var layer2 = map.layers[i];
