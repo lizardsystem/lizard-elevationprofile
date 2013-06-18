@@ -49,7 +49,7 @@
                 //        {opacity: 0.1}
                 //    ]
               //  }
-            },
+            //},
             grid: {clickable: true, hoverable: true}
         };
 
