@@ -26,7 +26,7 @@
             left: x + 5,
             "z-index": "9999",
             border: "none",
-            padding: "2px",
+            padding: "2px"
             "background-color": "#eee",
             opacity: 0.70
         }).appendTo("body").fadeIn(200);
@@ -40,15 +40,15 @@
         // TODO: hardcoded 'profile': ugly
         var elevationSeries = [{data: elevationData.profile}];
         var plotOptions = {
-            label: "Height",
-            lines: {
-                fill: true,
-                fillColor: {
-                    colors: [
-                        {opacity: 0.8},
-                        {opacity: 0.1}
-                    ]
-                }
+            label: "Height"
+            //lines: {
+                //fill: true,
+                //fillColor: {
+                //    colors: [
+                //        {opacity: 0.8},
+                //        {opacity: 0.1}
+                //    ]
+              //  }
             },
             grid: {clickable: true, hoverable: true}
         };
