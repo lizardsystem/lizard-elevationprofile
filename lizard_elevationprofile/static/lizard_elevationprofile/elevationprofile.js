@@ -53,7 +53,6 @@
             grid: {clickable: true, hoverable: true}
         };
 
-		console.log('profile');
 		$el.empty();
         $.plot($el, elevationSeries, plotOptions);
 
@@ -125,9 +124,11 @@
                 OpenLayers.Handler.Path.prototype.addPoint.apply(this, arguments);
 
                 if (!modifiedSwitch) {
+					lineLayer.removeAllFeatures();
                     lineLayer.events.on({sketchmodified: getElevationData});
                     modifiedSwitch = !modifiedSwitch;
                 }
+
             }
         });
 
@@ -149,7 +150,7 @@
             sketchcomplete: function () {
                 lineLayer.events.un({sketchmodified: getElevationData});
                 modifiedSwitch = !modifiedSwitch;
-            }
+            },
         });
 
         return drawLineControl;
