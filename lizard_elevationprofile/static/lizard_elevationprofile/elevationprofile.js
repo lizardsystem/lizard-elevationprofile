@@ -40,7 +40,7 @@
         // TODO: hardcoded 'profile': ugly
         var elevationSeries = [{data: elevationData.profile}];
         var plotOptions = {
-            label: "Height"
+            label: "Height",
             //lines: {
                 //fill: true,
                 //fillColor: {
