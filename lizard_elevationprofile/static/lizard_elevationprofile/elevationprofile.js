@@ -26,9 +26,9 @@
             left: x + 5,
             "z-index": "9999",
             border: "none",
-            padding: "2px",
-            "background-color": "#eee",
-            opacity: 0.70
+            padding: "2px"
+            //"background-color": "#eee",
+            //opacity: 0.70
         }).appendTo("body").fadeIn(200);
     }
 
