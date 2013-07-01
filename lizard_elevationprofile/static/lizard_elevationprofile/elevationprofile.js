@@ -134,8 +134,8 @@
 
         var drawLineControl = new OpenLayers.Control.DrawFeature(
             lineLayer,
-            //OpenLayers.Handler.Path,
-            customHandler,
+            OpenLayers.Handler.Path, // default OL Path handler
+            //customHandler,         // custom handler to enable live updating
             {
                 handlerOptions: {maxVertices: 2},
             }
