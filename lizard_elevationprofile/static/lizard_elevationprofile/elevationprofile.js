@@ -31,6 +31,7 @@
             opacity: 0.70
         }).appendTo("body").fadeIn(200);
     }
+    
 
     /** Draw elevation graph in popup with Flot jQuery plugin
      */
@@ -57,7 +58,6 @@
         $.plot($el, elevationSeries, plotOptions);
 
 
-
         // Bind hover event
         var previousPoint = null;
 		// FIX element for plothover
@@ -74,6 +74,25 @@
                 $("#tooltip").remove();
                 previousPoint = null;
             }
+        });
+
+        // Bind click event
+        var pointLayer = new OpenLayers.Layer.Vector("Point layer");
+        //$el.bind("plothover", function (event, pos, item) {
+        $el.bind("plotclick", function (event, pos, item) {
+            pointLayer.removeAllFeatures();
+            var lineLayer = map.getLayersByName("Profile layer")[0];
+            var lineGeometry = lineLayer.features[0].geometry;
+            var startPoint = lineGeometry.components[0];
+            var endPoint = lineGeometry.components[1];
+            var lineLength = lineGeometry.getLength();
+            // calculate x and y of clicked point
+            var x = startPoint.x + (endPoint.x - startPoint.x) * pos.x / lineLength;
+            var y = startPoint.y + (endPoint.y - startPoint.y) * pos.x / lineLength;
+            var plotPoint = new OpenLayers.Geometry.Point(x, y);
+            var pointFeature = new OpenLayers.Feature.Vector(plotPoint);
+            pointLayer.addFeatures(pointFeature);
+            map.addLayer(pointLayer);
         });
     };
 
