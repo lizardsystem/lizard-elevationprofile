@@ -124,7 +124,7 @@
                 OpenLayers.Handler.Path.prototype.addPoint.apply(this, arguments);
 
                 if (!modifiedSwitch) {
-					lineLayer.removeAllFeatures();
+					//lineLayer.removeAllFeatures();
                     lineLayer.events.on({sketchmodified: getElevationData});
                     modifiedSwitch = !modifiedSwitch;
                 }
@@ -146,6 +146,9 @@
 
         // register featureadded event on lineLayer
         lineLayer.events.on({
+            beforefeatureadded: function () {
+                lineLayer.removeAllFeatures();
+            },
             featureadded: getElevationData,
             sketchcomplete: function () {
                 lineLayer.events.un({sketchmodified: getElevationData});
