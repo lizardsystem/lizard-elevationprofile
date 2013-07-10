@@ -76,10 +76,11 @@
             }
         });
 
+        var pointLayer = map.getLayersByName("Point layer")[0];
+
         // Bind click event
-        var pointLayer = new OpenLayers.Layer.Vector("Point layer");
-        //$el.bind("plothover", function (event, pos, item) {
-        $el.bind("plotclick", function (event, pos, item) {
+        $el.bind("plothover", function (event, pos, item) {
+        //$el.bind("plotclick", function (event, pos, item) {
             pointLayer.removeAllFeatures();
             var lineLayer = map.getLayersByName("Profile layer")[0];
             var lineGeometry = lineLayer.features[0].geometry;
@@ -92,7 +93,6 @@
             var plotPoint = new OpenLayers.Geometry.Point(x, y);
             var pointFeature = new OpenLayers.Feature.Vector(plotPoint);
             pointLayer.addFeatures(pointFeature);
-            map.addLayer(pointLayer);
         });
     };
 
@@ -116,24 +116,44 @@
     /** Setup DrawLineControl and add to global OpenLayers map object
      */
     var setupDrawLineControl = function () {
+        var pointStyle = new OpenLayers.Style({
+            'pointRadius': 5,
+            'fillColor': "#ff0000",
+            'fillOpacity': 0.7,
+            'strokeColor': "#ff0000",
+            'strokeWidth': 2
+        });
+
+        var pointMap = new OpenLayers.StyleMap({
+            'default': pointStyle,
+        });
+
         var defaultStyle = new OpenLayers.Style({
             'strokeWidth': 3,
             'strokeColor': "#ff0000"
         });
+
         var tempStyle = new OpenLayers.Style({
             'strokeDashstyle': 'dash',
             'strokeColor': "#ff0000"
         });
+
         var styleMap = new OpenLayers.StyleMap({
             'default': defaultStyle,
             'temporary': tempStyle
         });
+
         var lineLayer = new OpenLayers.Layer.Vector(
             "Profile layer",
             {
                 displayInLayerSwitcher: false,
                 styleMap: styleMap
             }
+        );
+
+        var pointLayer = new OpenLayers.Layer.Vector(
+            "Point layer",
+            {styleMap: pointMap}
         );
 
         /* Custom path handler to draw *live* profiles
@@ -160,12 +180,14 @@
             }
         );
 
-        map.addLayer(lineLayer);
+        map.addLayers([lineLayer, pointLayer]);
         lineLayer.setZIndex(1100);
 
         // register featureadded event on lineLayer
         lineLayer.events.on({
             beforefeatureadded: function () {
+                var pointLayer = map.getLayersByName("Point layer")[0];
+                pointLayer.removeAllFeatures();
                 lineLayer.removeAllFeatures();
             },
             featureadded: getElevationData,
