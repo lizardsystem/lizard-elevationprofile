@@ -81,12 +81,16 @@
         // Bind click event
         $el.bind("plothover", function (event, pos, item) {
         //$el.bind("plotclick", function (event, pos, item) {
+            console.log(pos.x);
             pointLayer.removeAllFeatures();
             var lineLayer = map.getLayersByName("Profile layer")[0];
             var lineGeometry = lineLayer.features[0].geometry;
             var startPoint = lineGeometry.components[0];
             var endPoint = lineGeometry.components[1];
             var lineLength = lineGeometry.getLength();
+            // make sure graphPoint doesn't get out of bounds
+            pos.x = (pos.x < 0) ? 0 : pos.x;
+            pos.x = (pos.x > lineLength) ? lineLength : pos.x;
             // calculate x and y of clicked point
             var x = startPoint.x + (endPoint.x - startPoint.x) * pos.x / lineLength;
             var y = startPoint.y + (endPoint.y - startPoint.y) * pos.x / lineLength;
