@@ -81,7 +81,6 @@
         // Bind click event
         $el.bind("plothover", function (event, pos, item) {
         //$el.bind("plotclick", function (event, pos, item) {
-            console.log(pos.x);
             pointLayer.removeAllFeatures();
             var lineLayer = map.getLayersByName("Profile layer")[0];
             var lineGeometry = lineLayer.features[0].geometry;
@@ -207,6 +206,9 @@
     // draw line for elevation profile and get data from server
     var toggleElevationProfile = function () {
         var drawLineControl = map.getControlsByClass('OpenLayers.Control.DrawFeature')[0];
+        //var clickControl = map.getControlsBy('OpenLayers.Control.DrawFeature')[0];
+        // get default click control so we can activate and deactivate it properly
+        var clickControl = map.getControl('OpenLayers.Control_41');
 
         if (drawLineControl === undefined) {
             drawLineControl = setupDrawLineControl();
@@ -215,11 +217,13 @@
         if (drawLineControl.active) {
             drawLineControl.layer.destroyFeatures();
             drawLineControl.deactivate();
+            // reactivate default click control
+            clickControl.activate();
             map.removeControl(drawLineControl);
 
             // save Z indices
             var layer2zindex = [];
-            for (var i=0; i<map.layers.length; i++) {
+            for (var i=0; i< map.layers.length; i++) {
                 var layer = map.layers[i];
                 layer2zindex.push([layer, layer.getZIndex()]);
             }
@@ -227,7 +231,7 @@
             map.removeLayer(drawLineControl.layer);
 
             // restore Z indices
-            for (var j=0; j<layer2zindex.length; j++) {
+            for (var j=0; j < layer2zindex.length; j++) {
                 var layer = layer2zindex[j][0];
                 for (var i=0; i<map.layers.length; i++) {
                     var layer2 = map.layers[i];
@@ -241,6 +245,9 @@
             map.addControl(drawLineControl);
             map.addControl(new OpenLayers.Control.MousePosition());
             drawLineControl.activate();
+            // deactivate default click control so it also works on the iPad
+            console.log('deactivate', clickControl);
+            clickControl.deactivate();
         }
     };
 	var activateElevationProfile = function (event) {
