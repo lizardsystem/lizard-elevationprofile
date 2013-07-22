@@ -248,7 +248,6 @@
             map.addControl(new OpenLayers.Control.MousePosition());
             drawLineControl.activate();
             // deactivate default click control so it also works on the iPad
-            console.log('deactivate', clickControl);
             clickControl.deactivate();
         }
     };
