@@ -6,6 +6,7 @@ Changelog of lizard-elevationprofile
 ------------------
 
 - Show elevation profile in Box awesome for lizard day.
+- Fixed iPad bug when drawing elevation profiles
 
 
 0.2.2 (2013-06-04)

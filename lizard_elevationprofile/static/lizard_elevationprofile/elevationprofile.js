@@ -206,9 +206,11 @@
     // draw line for elevation profile and get data from server
     var toggleElevationProfile = function () {
         var drawLineControl = map.getControlsByClass('OpenLayers.Control.DrawFeature')[0];
-        //var clickControl = map.getControlsBy('OpenLayers.Control.DrawFeature')[0];
         // get default click control so we can activate and deactivate it properly
-        var clickControl = map.getControl('OpenLayers.Control_41');
+        // NOTE: ugly hack, the elegant way is to give this control a proper
+        // class name in lizard-ui / lizard-map, then get it with 
+        // map.getControlsByClass()
+        var clickControl = map.getControlsBy("displayClass", "olControl")[0];
 
         if (drawLineControl === undefined) {
             drawLineControl = setupDrawLineControl();
