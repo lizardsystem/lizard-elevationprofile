@@ -218,6 +218,8 @@
 
         if (drawLineControl.active) {
             drawLineControl.layer.destroyFeatures();
+            var pointLayer = map.getLayersByName("Point layer")[0];
+            pointLayer.removeAllFeatures();
             drawLineControl.deactivate();
             // reactivate default click control
             clickControl.activate();
