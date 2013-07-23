@@ -253,6 +253,7 @@
             clickControl.deactivate();
         }
     };
+
 	var activateElevationProfile = function (event) {
 		if (event.relatedTarget && event.relatedTarget.id === "elevation-profile-action"){
 			// switched to other tab
@@ -269,6 +270,21 @@
     function setUpElevationProfile() {
 		$('#box-awesome a[data-toggle="tab"]').on("show", activateElevationProfile);
 
+        // hack to add close button to elevation profile
+        var $ul = $('#box-awesome-tabs > ul');
+        var $closeBtn = $('<button type="button" class="close">&times;</button>')
+			.on('click', function (event) {
+				$ul.find('a:first').trigger('click');
+			});
+
+		var $closeBtnPane = $('<div style="height: 20px;">')
+            .append('Trek een lijn op de kaart')
+            .attr("display", "inline")
+			.append($closeBtn);
+
+        var $tabContent = $('#box-awesome-content-elevationprofile > p')
+            .empty()
+            .append($closeBtnPane);
     }
 
     $(document).ready(function () {
