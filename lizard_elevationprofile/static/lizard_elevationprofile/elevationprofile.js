@@ -24,7 +24,7 @@
             display: "none",
             top: y - 25,
             left: x + 5,
-            "z-index": "9999",
+            "z-index": "12000",
             border: "none",
             padding: "2px",
             "background-color": "#eee",
