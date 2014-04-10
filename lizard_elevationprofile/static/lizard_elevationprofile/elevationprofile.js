@@ -128,7 +128,7 @@
         });
 
         var pointMap = new OpenLayers.StyleMap({
-            'default': pointStyle,
+            'default': pointStyle
         });
 
         var defaultStyle = new OpenLayers.Style({
@@ -179,7 +179,7 @@
             OpenLayers.Handler.Path, // default OL Path handler
             //customHandler,         // custom handler to enable live updating
             {
-                handlerOptions: {maxVertices: 2},
+                handlerOptions: {maxVertices: 2}
             }
         );
 
@@ -197,7 +197,7 @@
             sketchcomplete: function () {
                 lineLayer.events.un({sketchmodified: getElevationData});
                 modifiedSwitch = !modifiedSwitch;
-            },
+            }
         });
 
         return drawLineControl;
