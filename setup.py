@@ -16,6 +16,7 @@ install_requires = [
     'lizard-map',
     #'pyproj',
     'requests',
+    'translations',
     ],
 
 tests_require = [

@@ -2,7 +2,12 @@
 host = https://translations.lizard.net
 type = PO
 
-[lizardsystem.lizard-elevationprofile]
+[lizard5.lizard-elevationprofile-djangojs]
+file_filter = lizard_elevationprofile/locale/<lang>/LC_MESSAGES/djangojs.po
+source_file = lizard_elevationprofile/locale/en/LC_MESSAGES/djangojs.po
+source_lang = en
+
+[lizard5.lizard-elevationprofile-django]
 file_filter = lizard_elevationprofile/locale/<lang>/LC_MESSAGES/django.po
 source_file = lizard_elevationprofile/locale/en/LC_MESSAGES/django.po
 source_lang = en

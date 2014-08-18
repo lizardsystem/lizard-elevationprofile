@@ -17,10 +17,14 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: views.py:23
-msgid "Elevation Profile"
+#: static/lizard_elevationprofile/elevationprofile.js:12
+msgid "s"
 msgstr ""
 
-#: views.py:33
-msgid "Draw a line to select an elevation profile"
+#: static/lizard_elevationprofile/elevationprofile.js:55
+msgid "Height"
+msgstr ""
+
+#: static/lizard_elevationprofile/elevationprofile.js:290
+msgid "Draw a line on the map."
 msgstr ""

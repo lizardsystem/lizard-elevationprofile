@@ -4,6 +4,18 @@
 
 (function () {
 
+    /** In case when translation's gettext function
+	of django not available. 
+     */
+    function has_gettext() {
+	try {
+	    return gettext('s') == 's';
+	}
+	catch(err) {
+	    return false;
+	}
+    }
+
     var q = null, popup = null, modifiedSwitch = false;
 
     /** Setup elevation profile graph div
@@ -40,8 +52,9 @@
 
         // TODO: hardcoded 'profile': ugly
         var elevationSeries = [{data: elevationData.profile}];
+	pl_label = (has_gettext()) ? gettext("Height") : "Height";
         var plotOptions = {
-            label: "Height",
+            label: pl_label,
             //lines: {
                 //fill: true,
                 //fillColor: {
@@ -272,13 +285,19 @@
 
         // hack to add close button to elevation profile
         var $ul = $('#box-awesome-tabs > ul');
+	//translate text
+	if (has_gettext()) {
+	    help_text = gettext("Draw a line on the map.");
+        } else {
+            help_text = "Draw a line on the map.";
+	}
         var $closeBtn = $('<button type="button" class="close">&times;</button>')
 			.on('click', function (event) {
 				$ul.find('a:first').trigger('click');
 			});
 
 		var $closeBtnPane = $('<div style="height: 20px;">')
-            .append('Trek een lijn op de kaart')
+            .append(help_text)
             .attr("display", "inline")
 			.append($closeBtn);
 
