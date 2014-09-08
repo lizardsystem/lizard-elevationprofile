@@ -81,6 +81,7 @@ STATICFILES_FINDERS = STATICFILES_FINDERS
 # url of rasterinfo server
 RASTERINFO_SERVER_URL = 'http://localhost:5000/rasterinfo/profile'
 
+SECRET_KEY = "Does not need to be secret during testing"
 
 try:
     # Import local settings that aren't stored in svn/git.
