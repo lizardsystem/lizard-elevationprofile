@@ -43,7 +43,7 @@ INSTALLED_APPS = [
     'lizard_elevationprofile',
     'lizard_map',
     'lizard_ui',
-    'staticfiles',
+    'django.contrib.staticfiles',
     'compressor',
     'south',
     'django_nose',
