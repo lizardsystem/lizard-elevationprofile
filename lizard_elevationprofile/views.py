@@ -7,7 +7,6 @@ from django.utils.translation import ugettext as _
 from django.views.generic.base import View
 from django.http import HttpResponse
 from django.conf import settings
-#from django.utils import simplejson as json
 
 from lizard_map.views import MapView
 from lizard_ui.layout import Action
