@@ -6,8 +6,12 @@ Changelog of lizard-elevationprofile
 ------------------
 
 - Show elevation profile in Box awesome for lizard day.
+
 - Fixed iPad bug when drawing elevation profiles.
+
 - Fix js for IE.
+
+- Updated for django 1.6.
 
 
 0.2.2 (2013-06-04)
