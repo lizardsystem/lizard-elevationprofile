@@ -2,8 +2,8 @@ Changelog of lizard-elevationprofile
 ===================================================
 
 
-0.2.3 (unreleased)
-------------------
+1.0 (2014-12-15)
+----------------
 
 - Show elevation profile in Box awesome for lizard day.
 
